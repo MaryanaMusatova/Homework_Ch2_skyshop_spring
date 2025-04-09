@@ -1,5 +1,6 @@
 package org.skypro.skyshop.model.service;
 
+import jakarta.annotation.PostConstruct;
 import org.skypro.skyshop.model.article.Article;
 import org.skypro.skyshop.model.product.DiscountedProduct;
 import org.skypro.skyshop.model.product.FixPriceProduct;
@@ -8,10 +9,7 @@ import org.skypro.skyshop.model.product.SimpleProduct;
 import org.skypro.skyshop.model.search.Searchable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +21,10 @@ public class StorageService {
     public StorageService() {
         this.products = new HashMap<>();
         this.articles = new HashMap<>();
+        initTestData();
+    }
+        @PostConstruct
+        private void initTestData() {
         addProduct(new SimpleProduct("ноутбук", 67000, UUID.randomUUID()));
         addProduct(new DiscountedProduct("планшет", 36000, 10, UUID.randomUUID()));
         addProduct(new FixPriceProduct("моноблок", 250000, UUID.randomUUID()));
@@ -55,5 +57,7 @@ public class StorageService {
                 articles.values().stream()
         ).collect(Collectors.toSet());
     }
-
+    public Optional<Product> getProductById(UUID id) {
+        return Optional.ofNullable(products.get(id));
+    }
 }
